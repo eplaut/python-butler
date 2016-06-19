@@ -18,6 +18,12 @@ class ButlerTest(Butler):
     def delete_test_delete(self):
         return 'test delete'
 
+    def get_test_var(self, var):
+        return 'test {}'.format(var)
+
+    def get_test_defaultvar(self, var=5):
+        return 'test {}'.format(var)
+
 
 @slash.fixture
 def run_server():
