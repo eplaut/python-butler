@@ -24,6 +24,9 @@ class ButlerTest(Butler):
     def get_test_defaultvar(self, var=5):
         return 'test {}'.format(var)
 
+    def get_test__with__slashes(self):
+        return 'test'
+
 
 @slash.fixture(scope='session')
 def run_server():
