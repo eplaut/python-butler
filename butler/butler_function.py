@@ -13,19 +13,23 @@ class ButlerFunction(object):
 
     def get_urls(self):
         urls = []
-        base_url = self._get_base_url()
         params = ['<{}>'.format(x) for x in self.args]
         args_length = len(self.args) - len(self.defaults)
         for i in range(len(self.defaults) + 1):
             index = -i if i > args_length else None
-            urls.append(self._get_url(base_url, params[:index]))
+            urls.append(self._get_url(params[:index]))
         return urls
+
+    def get_default(self, key):
+        rargs = [_ for _ in reversed(self.args)]
+        rdefaults = [_ for _ in reversed(self.defaults)]
+        return rdefaults[rargs.index(key)]
 
     def _get_base_url(self):
         """returns the prefix for the view function, double underscore changed to slash"""
         return '/{}/'.format(self.name.lower().replace('__', '/'))
 
-    @staticmethod
-    def _get_url(base_url, params=[]):
+    def _get_url(self, params=[]):
         """returns full url, removing ending slashes"""
-        return str(base_url + '/'.join(params)).rstrip('/')
+        base_url = self._get_base_url()
+        return str(base_url + '/'.join([str(p) for p in params])).rstrip('/')

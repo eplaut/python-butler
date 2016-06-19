@@ -3,6 +3,7 @@ from flask import Flask, request
 from logbook import debug
 
 from .butler_function import ButlerFunction
+from .client import ButlerClient
 
 class Butler(object):
     def __init__(self):
@@ -10,19 +11,15 @@ class Butler(object):
         self.data = {}
         self.functions = []
         self._register_urls()
+        # Flask defaults
+        self.protocol = 'http'
+        self.host = '127.0.0.1'
+        self.port = '5000'
+        self.client = ButlerClient(self)
 
-    def _get_urls(self, function_name, function_object):
-        urls = []
-        args, _, _, defaults = inspect.getargspec(function_object)
-        params = ['<{}>'.format(x) for x in args]
-        base_url = '/{}/'.format(function_name.split('_', 1)[1].lower().replace('__', '/'))
-        url = str(base_url + '/'.join(params[1:])).rstrip('/')
-        urls.append(url)
-        if defaults is not None:
-            for i in range(1, len(defaults)+1):
-                url = str(base_url + '/'.join(params[1:-i])).rstrip('/')
-                urls.append(url)
-        return urls
+    @property
+    def base_url(self):
+        return '{0.protocol}://{0.host}:{0.port}'.format(self)
 
     def _register_urls(self):
         functions = inspect.getmembers(self, predicate=inspect.ismethod)
@@ -35,6 +32,18 @@ class Butler(object):
                     self._app.add_url_rule(url, methods=[function.method], view_func=function_object)
 
     def run(self, *args, **kwargs):
+        args = list(args)
+        try:
+            self.host = args[0]
+            self.port = args[1]
+        except IndexError:
+            pass
+        if 'host' in kwargs:
+            self.host = kwargs['host']
+        if 'port' in kwargs:
+            self.port = kwargs['port']
+        if 'ssl_context' in kwargs:
+            self.protocol = 'https'
         self._app.run(*args, **kwargs)
 
     def get_stop(self):

@@ -42,4 +42,4 @@ def run_server():
         time.sleep(1)
 
     slash.add_cleanup(stop_server, scope='session')
-
+    return butler
