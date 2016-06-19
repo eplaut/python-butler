@@ -12,13 +12,13 @@ class Butler(object):
     def _get_urls(function_name, function_object):
         urls = []
         args, _, _, defaults = inspect.getargspec(function_object)
-        params = map('<{}>'.format, args)
+        params = list(map('<{}>'.format, args))
         base_url = '/{}/'.format(function_name.split('_', 1)[1].lower())
         urls.append(base_url + '/'.join(params[1:]))
         if defaults is not None:
             for i in range(1, len(defaults)+1):
                 urls.append(base_url + '/'.join(params[1:-i]))
-        urls = map(lambda x: x.rstrip('/'), urls)
+        urls = list(map(lambda x: x.rstrip('/'), urls))
         return urls
 
     def _register_urls(self):

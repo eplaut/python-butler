@@ -8,5 +8,5 @@ from .fixtures import run_server
 def test_methods(run_server, method):
     base_url = 'http://localhost:8888'
     r = getattr(requests, method)('{}/test_{}'.format(base_url, method))
-    assert r.content == 'test {}'.format(method)
+    assert r.content.decode("utf-8") == 'test {}'.format(method)
 
