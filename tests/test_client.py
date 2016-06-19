@@ -13,14 +13,14 @@ def test_client_sanity(run_server):
 
 def test_client_method(run_server):
     r = run_server.client.delete_test_delete()
-    assert r.content == 'test delete'
+    assert r.content.decode("utf-8") == 'test delete'
 
 def test_client_var(run_server):
     r = run_server.client.get_test_var(100)
-    assert r.content == 'test 100'
+    assert r.content.decode("utf-8") == 'test 100'
     
     r = run_server.client.get_test_defaultvar()
-    assert r.content == 'test 5'
+    assert r.content.decode("utf-8") == 'test 5'
     
     r = run_server.client.get_test_defaultvar(200)
-    assert r.content == 'test 200'
+    assert r.content.decode("utf-8") == 'test 200'
