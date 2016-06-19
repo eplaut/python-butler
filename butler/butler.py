@@ -1,6 +1,6 @@
 import inspect
 from flask import Flask, request
-from logbook import debug, info
+from logbook import debug
 
 class Butler(object):
     def __init__(self):
@@ -12,7 +12,7 @@ class Butler(object):
     def _get_urls(function_name, function_object):
         urls = []
         args, _, _, defaults = inspect.getargspec(function_object)
-        params = list(map('<{}>'.format, args))
+        params = ['<{}>'.format(x) for x in args]
         base_url = '/{}/'.format(function_name.split('_', 1)[1].lower().replace('__', '/'))
         url = str(base_url + '/'.join(params[1:])).rstrip('/')
         urls.append(url)
