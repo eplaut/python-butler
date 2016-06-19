@@ -2,14 +2,16 @@ import inspect
 from flask import Flask, request
 from logbook import debug
 
+from .butler_function import ButlerFunction
+
 class Butler(object):
     def __init__(self):
         self._app = Flask(__name__)
         self.data = {}
+        self.functions = []
         self._register_urls()
 
-    @staticmethod
-    def _get_urls(function_name, function_object):
+    def _get_urls(self, function_name, function_object):
         urls = []
         args, _, _, defaults = inspect.getargspec(function_object)
         params = ['<{}>'.format(x) for x in args]
@@ -25,11 +27,12 @@ class Butler(object):
     def _register_urls(self):
         functions = inspect.getmembers(self, predicate=inspect.ismethod)
         for function_name, function_object in functions:
-            method = function_name.split('_', 1)[0].upper()
-            if method in ['GET', 'POST', 'PUT', 'DELETE']:
-                for url in self._get_urls(function_name, function_object):
+            function = ButlerFunction(function_name, function_object)
+            if function.method in ['GET', 'POST', 'PUT', 'DELETE']:
+                self.functions.append(function)
+                for url in function.get_urls():
                     debug('Adding view {}, url {}'.format(function_name, url))
-                    self._app.add_url_rule(url, methods=[method], view_func=function_object)
+                    self._app.add_url_rule(url, methods=[function.method], view_func=function_object)
 
     def run(self, *args, **kwargs):
         self._app.run(*args, **kwargs)
