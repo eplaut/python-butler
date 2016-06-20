@@ -1,0 +1,4 @@
+-r requirements.txt
+slash==0.20.3
+pylint==1.5.6
+coverage==4.1
