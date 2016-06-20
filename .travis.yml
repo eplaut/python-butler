@@ -6,7 +6,12 @@ python:
   - "3.5"
 # command to install dependencies
 install:
-    - pip install -r requirements.txt
+    - pip install -r tests_requirements.txt
     - pip install .
 # command to run tests
-script: slash run -vvv tests/
+script:
+    - pylint --rcfile=.pylintrc setup.py
+    - pylint --rcfile=.pylintrc butler
+    - flake8 --ignore=D100,D104,D401,E501,F401 butler/
+    - slash run -vvv tests/
+#    - coverage report --fail-under=100

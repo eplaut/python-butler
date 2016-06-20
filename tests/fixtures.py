@@ -5,6 +5,7 @@ import threading
 
 from butler import Butler
 
+
 class ButlerTest(Butler):
     def get_test_get(self):
         return 'test get'
@@ -41,4 +42,4 @@ def run_server():
         time.sleep(1)
 
     slash.add_cleanup(stop_server, scope='session')
-
+    return butler
