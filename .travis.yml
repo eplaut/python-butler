@@ -1,17 +1,23 @@
 language: python
 python:
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-# command to install dependencies
+- '2.7'
+- '3.3'
+- '3.4'
+- '3.5'
 install:
-    - pip install -r tests_requirements.txt
-    - pip install .
-# command to run tests
+- pip install -r tests_requirements.txt
+- pip install .
 script:
-    - pylint --rcfile=.pylintrc setup.py
-    - pylint --rcfile=.pylintrc butler
-    - flake8 --ignore=D100,D104,D401,E501,F401 butler/
-    - slash run -vvv tests/
-#    - coverage report --fail-under=100
+- pylint --rcfile=.pylintrc setup.py
+- pylint --rcfile=.pylintrc butler
+- flake8 --ignore=D100,D104,D401,E501,F401 butler/
+- slash run -vvv tests/
+# - coverage report --fail-under=100
+deploy:
+  provider: pypi
+  user: eplaut
+  password:
+    secure: PV9+pGQQcO++cUzGIW6jdCCPFdpFrYdnJ7Pk1rfLMhat7AG4bkV4v4kB59BjNN1c41FH79sDj3zRiOSKlsWIKn8fpFIU5UiwL1CXhtxcYrGp9Ouq/3N9xjpDNHYsnfLCnLj2Ml+uYLaVFPVIyLrr7iflPy3++pNevrd5m7B5XbgIRllILKlMlIRaW9a7tb7BLDOdZhc4GsE5+CSy1L7yCZbXF7VppiJY2cuL+xCkPfF2fCLdedEQRMCN0NZ2HeWnNlKZ1HKNIyOEnDOz6RPkM7+lkDiI9rayq5hWCZ5z6K+J7jeQ0W/Fj8yPfvvbSO1blrqRDLU81rvUb40xEmP8gaMaf7QJVhpzphxDeQnnXwSXud1DityBxpEyXxHK6Jar8bS+wF5tj9y3jJUUl70C4yYjJ7wostOJwQC0/S4YR2Acd8NUp80dR5W4Gi7PBZdR/1p/TOguBsk5exYMji1DrgIB8dyj8Lts0xP+NbF8RW+Bkitpuu4/Ryd4xC9w8h2txgBekrrDrAXe4+/0WGWsS8Me88s2zs8HnTcq3PlYdOidZQVkA6P9huZKem3hQpihirVqIH+7Bj1c0gr/2xhnWTfX7DUoWRVfyKSzUFR+7WQlWneT8+c3i5HmeVSltPCg416MGs0TNzjEZjiSayLDYhZx4bg6qKeyDfC4VcS/tiM=
+  on:
+    tags: true
+    repo: eplaut/python-butler
