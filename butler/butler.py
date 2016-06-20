@@ -7,7 +7,7 @@ from .client import ButlerClient
 
 class Butler(object):
     """Butler is ease to use Flask wrapper.
-    It allows to develop and maintain small http server, with no need to handle flask app, 
+    It allows to develop and maintain small http server, with no need to handle flask app,
     and provide a client which communicate with it.
     Moreover, using Butler as a app container,allows you to change the data of the object
     and reload the http server without losing you data.

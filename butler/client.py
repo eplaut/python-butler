@@ -34,7 +34,6 @@ class ButlerClient(object):
 
         # create new function from ButlerFunction object
         def client_func(*args, **kwargs):
-            _dict = {}
             params = []
             args = list(args)  # args is tuple, which is immutable
             for arg in func.args:
@@ -46,7 +45,7 @@ class ButlerClient(object):
                 else:
                     params.append(args.pop(0))
 
-            url = self._server.base_url + func._get_url(params)
+            url = self._server.base_url + func.get_url(params)
             self.response = self.session.request(func.method, url, *args, **kwargs)
             return self.response
 
