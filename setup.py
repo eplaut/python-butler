@@ -11,8 +11,8 @@ with open(_in_same_dir("butler", "__version__.py")) as version_file:
     exec(version_file.read())  # pylint: disable=W0122
 
 install_requires = [
-    "Flask",
-    "requests>=1.1.0",
+    "Flask==0.11.1",
+    "requests==2.10.0",
 ]
 
 
@@ -27,7 +27,7 @@ setup(name="butler",
       license="BSD",
       author="Eli Plaut",
       author_email="eplaut@gmail.com",
-      url="http://butler.github.com/",
+      url="https://github.com/eplaut/python-butler",
       version=__version__,  # pylint: disable=E0602
       packages=find_packages(exclude=["tests"]),
       install_requires=install_requires,
