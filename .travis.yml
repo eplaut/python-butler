@@ -12,5 +12,6 @@ install:
 script:
     - pylint --rcfile=.pylintrc setup.py
     - pylint --rcfile=.pylintrc butler
+    - flake8 --ignore=D100,D104,D401,E501,F401 butler/
     - slash run -vvv tests/
 #    - coverage report --fail-under=100

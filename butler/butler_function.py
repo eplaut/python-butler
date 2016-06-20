@@ -2,7 +2,7 @@ import inspect
 
 
 class ButlerFunction(object):
-    """ButlerFunction is object to parse Butler's functions' properties"""
+    """ButlerFunction is object to parse Butler's functions' properties."""
 
     def __init__(self, function_name, function_object):
         """Init properties, using inspect to get function's parameters.
@@ -20,6 +20,7 @@ class ButlerFunction(object):
 
     def get_urls(self):
         """Returns all available paths for function.
+
         starts with the function name (without leading method, and double underscores changed to slashes
         and than functions parameters by there order, parameters with default values can be ommitted
         by their order
@@ -33,7 +34,7 @@ class ButlerFunction(object):
         return urls
 
     def get_default(self, name):
-        """Returns default value for argument by `name`
+        """Returns default value for argument by `name`.
 
         :param name: the name of the required parameter
         """
@@ -42,10 +43,10 @@ class ButlerFunction(object):
         return rdefaults[rargs.index(name)]
 
     def _get_base_url(self):
-        """returns the prefix for the view function, double underscore changed to slash"""
+        """returns the prefix for the view function, double underscore changed to slash."""
         return '/{}/'.format(self.name.lower().replace('__', '/'))
 
     def get_url(self, params):
-        """returns full url, removing ending slashes"""
+        """returns full url, removing ending slashes."""
         base_url = self._get_base_url()
         return str(base_url + '/'.join([str(p) for p in params])).rstrip('/')

@@ -1,12 +1,16 @@
 import requests
 
+
 class ButlerClient(object):
     """ButlerClient is function factory for a Butler server.
+
     for each function in the Butler server, there is equvivalent function in the client
     with the same parameters, and can send the request to the Butler instance
     """
+
     def __init__(self, server):
-        """Init properties
+        """Init properties.
+
         :param server: Butler instance
         """
         self._server = server
@@ -15,13 +19,15 @@ class ButlerClient(object):
         self.response = None
 
     def _get_function(self, function_name):
-        """get ButlerFunction instance by it's name"""
+        """get ButlerFunction instance by it's name."""
         for func in self._server.functions:
             if func.function_name == function_name:
                 return func
 
     def __getattr__(self, name):
-        """Override the original __getattr__ to have auto-generated function
+        """Override the original __getattr__ to have auto-generated function.
+
+        :param name: name of required function
         """
         # use cache functions
         if name in self.functions:
