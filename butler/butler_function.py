@@ -14,7 +14,7 @@ class ButlerFunction(object):
         function_name_parts = self.function_name.split('_', 1)  # handle function that doesn't contains underscore
         self.method, self.name = function_name_parts[0].upper(), function_name_parts[-1]
         self.obj = function_object
-        args, _, _, defaults = inspect.getargspec(function_object)
+        args, _, _, defaults = inspect.getargspec(function_object)  # pylint: disable=deprecated-method
         self.args = args[1:]
         self.defaults = defaults if defaults else []
 
