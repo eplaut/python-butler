@@ -1,9 +1,9 @@
 import requests
 
-from .fixtures import run_server
+from .fixtures import butler_client
 
 
-def test_required_variable(run_server):
+def test_required_variable(butler_client):
     r = requests.get('http://localhost:8888/test_var')
     assert r.status_code == 404
 
@@ -12,7 +12,7 @@ def test_required_variable(run_server):
     assert r.content.decode("utf-8") == 'test 1'
 
 
-def test_default_variable(run_server):
+def test_default_variable(butler_client):
     r = requests.get('http://localhost:8888/test_defaultvar')
     assert r.status_code == 200
     assert r.content.decode("utf-8") == 'test 5'

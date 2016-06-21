@@ -1,9 +1,9 @@
 import inspect
-from flask import Flask, request
-from logbook import debug
+from flask import request
 
 from .butler_function import ButlerFunction
 from .client import ButlerClient
+from .server import ButlerServer
 
 
 class Butler(object):
@@ -20,69 +20,38 @@ class Butler(object):
 
     The following example will add route `/api/get_data`:
 
-        class MyButler(Butler):
-            def get_api__get_data(self):
-            return self.data
+        >>> class MyButler(Butler):
+                def get_api__get_data(self):
+                    return self.data
+
+        >>> MyButler.Server('0.0.0.0:6789').run  # use threading for non-blocking run
+
+        >>> MyButler.Client('http://192.168.1.101:6789').get_data()
+
     """
 
     def __init__(self):
-        """init all parameters."""
-        # create Flask application
-        self._app = Flask(__name__)
-
-        # register functions to app routes
+        """Init Butler functions."""
         self.functions = []
-        self._register_urls()
+        self.init_functions()
 
-        # Flask defaults
-        self.protocol = 'http'
-        self.host = '127.0.0.1'
-        self.port = '5000'
-        self.args = []
-        self.kwargs = {}
-        self.client = ButlerClient(self)
+    @classmethod
+    def Server(cls, url):
+        """Return ButlerServer class."""
+        return ButlerServer(cls(), url)
 
-    @property
-    def base_url(self):
-        """Get base url of application."""
-        return '{0.protocol}://{0.host}:{0.port}'.format(self)
+    @classmethod
+    def Client(cls, url):
+        """Return ButlerClient class."""
+        return ButlerClient(cls(), url)
 
-    def _register_urls(self):
+    def init_functions(self):
         """Read class functions and register the matching routes."""
         functions = inspect.getmembers(self, predicate=inspect.ismethod)
         for function_name, function_object in functions:
             function = ButlerFunction(function_name, function_object)
             if function.method in ['GET', 'POST', 'PUT', 'DELETE']:
                 self.functions.append(function)
-                for url in function.get_urls():
-                    debug('Adding view {}, url {}'.format(function_name, url))
-                    self._app.add_url_rule(url, methods=[function.method], view_func=function_object)
-
-    def run(self, *args, **kwargs):
-        """Start flask application, get all paramters as Flask.run method."""
-        self._update_app_paramters(*args, **kwargs)
-        self._app.run(host=self.host, port=self.port, *self.args, **self.kwargs)
-
-    def _update_app_paramters(self, *args, **kwargs):
-        """Parse `run` function parameters and updates `host`, `port` and `protocol` properties."""
-        args = list(args)  # args is tuple, which is immutable
-        try:
-            self.host = args.pop(0)
-            self.port = args.pop(0)
-        except IndexError:
-            pass
-        if 'host' in kwargs:
-            self.host = kwargs.pop('host')
-        if 'port' in kwargs:
-            self.port = kwargs.pop('port')
-        if 'ssl_context' in kwargs and kwargs['ssl_context']:
-            self.protocol = 'https'
-        else:
-            self.protocol = 'http'
-
-        # update old args and kwargs
-        self.args = args + self.args[len(args):]
-        self.kwargs.update(kwargs)
 
     def get_stop(self):
         """Stop the Flask application."""

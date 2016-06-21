@@ -30,16 +30,17 @@ class ButlerTest(Butler):
 
 
 @slash.fixture(scope='session')
-def run_server():
-    butler = ButlerTest()
-    t = threading.Thread(target=butler.run, kwargs={'host': 'localhost', 'port': '8888'})
+def butler_client():
+    butler_server = ButlerTest.Server('http://localhost:8888')
+    butler_client = ButlerTest.Client('http://localhost:8888')
+    t = threading.Thread(target=butler_server.run, kwargs={'host': 'localhost', 'port': '8888'})
     t.daemon = True
     t.start()
     time.sleep(1)
 
     def stop_server():
-        requests.get('http://localhost:8888/stop')
+        butler_client.get_stop()
         time.sleep(1)
 
     slash.add_cleanup(stop_server, scope='session')
-    return butler
+    return butler_client
