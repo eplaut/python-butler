@@ -4,15 +4,18 @@ python:
 - '3.3'
 - '3.4'
 - '3.5'
+- 'pypy'
 install:
 - pip install -r tests_requirements.txt
-- pip install .
+- pip install -e .
 script:
 - pylint --rcfile=.pylintrc setup.py
 - pylint --rcfile=.pylintrc butler
 - flake8 --ignore=D100,D104,D401,E501,F401 butler/
-- slash run -vvv tests/
-# - coverage report --fail-under=100
+- slash run -vvv tests/ --with-coverage --cov butler/
+- coverage report --fail-under=100
+after_success:
+- coveralls
 deploy:
   provider: pypi
   user: eplaut
