@@ -38,6 +38,8 @@ class Butler(object):
         self.protocol = 'http'
         self.host = '127.0.0.1'
         self.port = '5000'
+        self.args = []
+        self.kwargs = {}
         self.client = ButlerClient(self)
 
     @property
@@ -59,26 +61,28 @@ class Butler(object):
     def run(self, *args, **kwargs):
         """Start flask application, get all paramters as Flask.run method."""
         self._update_app_paramters(*args, **kwargs)
-        kwargs.pop('host', None)
-        kwargs.pop('port', None)
-        self._app.run(host=self.host, port=self.port, *args, **kwargs)
+        self._app.run(host=self.host, port=self.port, *self.args, **self.kwargs)
 
     def _update_app_paramters(self, *args, **kwargs):
         """Parse `run` function parameters and updates `host`, `port` and `protocol` properties."""
         args = list(args)  # args is tuple, which is immutable
         try:
-            self.host = args[0]
-            self.port = args[1]
+            self.host = args.pop(0)
+            self.port = args.pop(0)
         except IndexError:
             pass
         if 'host' in kwargs:
-            self.host = kwargs['host']
+            self.host = kwargs.pop('host')
         if 'port' in kwargs:
-            self.port = kwargs['port']
+            self.port = kwargs.pop('port')
         if 'ssl_context' in kwargs and kwargs['ssl_context']:
             self.protocol = 'https'
         else:
             self.protocol = 'http'
+
+        # update old args and kwargs
+        self.args = args + self.args[len(args):]
+        self.kwargs.update(kwargs)
 
     def get_stop(self):
         """Stop the Flask application."""
