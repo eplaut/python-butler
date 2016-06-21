@@ -8,19 +8,20 @@ class ButlerClient(object):
     with the same parameters, and can send the request to the Butler instance
     """
 
-    def __init__(self, server):
+    def __init__(self, butler, url):
         """Init properties.
 
         :param server: Butler instance
         """
-        self._server = server
+        self.url = url
+        self.butler = butler
         self.functions = {}
         self.session = requests.Session()
         self.response = None
 
     def _get_function(self, function_name):
         """get ButlerFunction instance by it's name."""
-        for func in self._server.functions:
+        for func in self.butler.functions:
             if func.function_name == function_name:
                 return func
 
@@ -51,7 +52,7 @@ class ButlerClient(object):
                 else:
                     params.append(args.pop(0))
 
-            url = self._server.base_url + func.get_url(params)
+            url = self.url + func.get_url(params)
             self.response = self.session.request(func.method, url, *args, **kwargs)
             return self.response
 

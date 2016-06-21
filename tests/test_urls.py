@@ -1,10 +1,10 @@
 import slash
 import requests
 
-from .fixtures import run_server
+from .fixtures import butler_client
 
 
-def test_default_variable(run_server):
+def test_default_variable(butler_client):
     r = requests.get('http://localhost:8888/test__with__slashes')
     assert r.status_code == 404
 
