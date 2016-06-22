@@ -1,5 +1,6 @@
 -r requirements.txt
-slash==0.20.3
+-e git+https://github.com/getslash/slash.git#egg=slash-develop
 pylint==1.5.6
 coverage==4.1
 flake8-docstrings==0.2.8
+coveralls==1.1
