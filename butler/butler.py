@@ -53,14 +53,14 @@ class Butler(object):
             return {}
 
     @classmethod
-    def Server(cls, url):
+    def Server(cls, url, *args, **kwargs):
         """Return ButlerServer class."""
-        return ButlerServer(cls(), url)
+        return ButlerServer(cls(*args, **kwargs), url)
 
     @classmethod
-    def Client(cls, url):
+    def Client(cls, url, *args, **kwargs):
         """Return ButlerClient class."""
-        return ButlerClient(cls(), url)
+        return ButlerClient(cls(*args, **kwargs), url)
 
     def init_functions(self):
         """Read class functions and register the matching routes."""
