@@ -1,3 +1,4 @@
+import json
 import inspect
 from flask import request
 
@@ -26,7 +27,7 @@ class Butler(object):
 
         >>> MyButler.Server('0.0.0.0:6789').run  # use threading for non-blocking run
 
-        >>> MyButler.Client('http://192.168.1.101:6789').get_data()
+        >>> MyButler.Client('http://192.168.1.101:6789').get_api__get_data()
 
     """
 
@@ -34,6 +35,22 @@ class Butler(object):
         """Init Butler functions."""
         self.functions = []
         self.init_functions()
+
+    @property
+    def json(self):
+        """Load request body."""
+        try:
+            return json.loads(request.data.decode('utf-8'))
+        except RuntimeError:
+            return {}
+
+    @property
+    def params(self):
+        """Get requests arguments."""
+        try:
+            return request.args
+        except RuntimeError:  # cannot inspect this function
+            return {}
 
     @classmethod
     def Server(cls, url):
