@@ -28,6 +28,8 @@ class ButlerServer(object):
 
         # readurl params
         parsed_url = urlparse(url)
+        if not parsed_url.scheme:  # urlparse cannot get post or hostname without scheme
+            parsed_url = urlparse('http://{}'.format(url))
         self.host = parsed_url.hostname or '127.0.0.1'
         self.port = self._get_port_from_url(parsed_url)
         self.args = []
