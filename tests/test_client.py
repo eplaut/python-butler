@@ -24,3 +24,11 @@ def test_client_var(butler_client):
     
     r = butler_client.get_test_defaultvar(200)
     assert r.content.decode("utf-8") == 'test 200'
+
+def test_client_not_exits_function(butler_client):
+    with slash.assert_raises(AttributeError):
+        butler_client.not_exits_function()
+
+def test_client_unsupported_function(butler_client):
+    with slash.assert_raises(AttributeError):
+        butler_client.init_functions()

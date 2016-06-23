@@ -38,9 +38,7 @@ class ButlerTest(Butler):
 def butler_client():
     butler_server = ButlerTest.Server('http://localhost:8888')
     butler_client = ButlerTest.Client('http://localhost:8888')
-    t = threading.Thread(target=butler_server.run)
-    t.daemon = True
-    t.start()
+    butler_server.run_async()
     time.sleep(1)
 
     def stop_server():
