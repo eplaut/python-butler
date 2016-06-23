@@ -1,3 +1,4 @@
+import threading
 from flask import Flask
 from logbook import debug
 
@@ -54,6 +55,12 @@ class ButlerServer(object):
         """Start flask application, get all paramters as Flask.run method."""
         self._update_app_paramters(*args, **kwargs)
         self._app.run(host=self.host, port=self.port, *self.args, **self.kwargs)
+
+    def run_async(self, *args, **kwargs):
+        """Same as run, but async."""
+        t = threading.Thread(target=self.run, args=args, kwargs=kwargs)
+        t.daemon = True
+        t.start()
 
     def _update_app_paramters(self, *args, **kwargs):
         """Parse `run` function parameters and updates `host` and `port` properties."""
