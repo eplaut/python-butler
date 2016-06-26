@@ -24,6 +24,7 @@ class ButlerServer(object):
         self._app = Flask(__name__)
 
         # register functions to app routes
+        self.butler = butler
         self.functions = butler.functions
         self._register_urls()
 

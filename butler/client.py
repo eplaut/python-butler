@@ -13,7 +13,7 @@ class ButlerClient(object):
 
         :param server: Butler instance
         """
-        self.url = url
+        self.url = url.rstrip('/')
         self.butler = butler
         self.functions = {}
         self.session = requests.Session()

@@ -32,3 +32,11 @@ def test_client_not_exits_function(butler_client):
 def test_client_unsupported_function(butler_client):
     with slash.assert_raises(AttributeError):
         butler_client.init_functions()
+
+def test_client_rstrip_url(butler_client):
+    r = butler_client.get_test_get()
+    assert r.status_code == 200
+
+    new_butler_client = butler_client.butler.Client('http://localhost:8888/')
+    r = new_butler_client.get_test_get()
+    assert r.status_code == 200
