@@ -41,8 +41,8 @@ class Butler(object):
         """Load request body."""
         try:
             return json.loads(request.data.decode('utf-8'))
-        except RuntimeError:
-            return {}
+        except (RuntimeError, ValueError):
+            return None
 
     @property
     def params(self):
