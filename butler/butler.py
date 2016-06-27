@@ -50,7 +50,7 @@ class Butler(object):
         try:
             return request.args
         except RuntimeError:  # cannot inspect this function
-            return None
+            return {}
 
     @classmethod
     def Server(cls, url, *args, **kwargs):
