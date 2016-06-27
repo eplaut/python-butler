@@ -41,8 +41,8 @@ class Butler(object):
         """Load request body."""
         try:
             return json.loads(request.data.decode('utf-8'))
-        except RuntimeError:
-            return {}
+        except (RuntimeError, ValueError):
+            return None
 
     @property
     def params(self):
@@ -50,7 +50,7 @@ class Butler(object):
         try:
             return request.args
         except RuntimeError:  # cannot inspect this function
-            return {}
+            return None
 
     @classmethod
     def Server(cls, url, *args, **kwargs):
