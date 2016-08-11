@@ -59,9 +59,9 @@ class ButlerServer(object):
 
     def run_async(self, *args, **kwargs):
         """Same as run, but async."""
-        t = threading.Thread(target=self.run, args=args, kwargs=kwargs)
-        t.daemon = True
-        t.start()
+        self.thread = threading.Thread(target=self.run, args=args, kwargs=kwargs)
+        self.thread.daemon = True
+        self.thread.start()
 
     def _update_app_paramters(self, *args, **kwargs):
         """Parse `run` function parameters and updates `host` and `port` properties."""
