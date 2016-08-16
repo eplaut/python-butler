@@ -1,10 +1,13 @@
+import sys
 import json
+import hashlib
 import inspect
-from flask import request
+from flask import request, jsonify
 
 from .butler_function import ButlerFunction
 from .client import ButlerClient
 from .server import ButlerServer
+from .__version__ import __version__ as butler_version
 
 
 class Butler(object):
@@ -22,14 +25,18 @@ class Butler(object):
     The following example will add route `/api/get_data`:
 
         >>> class MyButler(Butler):
-                def get_api__get_data(self):
-                    return self.data
+        ...     def get_api__get_data(self):
+        ...         return 'ok'
+        ...
 
-        >>> MyButler.Server('0.0.0.0:6789').run  # use threading for non-blocking run
+        >>> MyButler.Server('0.0.0.0:6789').run_async()  # use threading for non-blocking run
 
-        >>> MyButler.Client('http://192.168.1.101:6789').get_api__get_data()
+        >>> print(MyButler.Client('http://0.0.0.0:6789').get_api__get_data().content.decode('utf-8'))
+        ok
 
     """
+
+    _server = None
 
     def __init__(self):
         """Init Butler functions."""
@@ -70,10 +77,27 @@ class Butler(object):
             if function.method in ['GET', 'POST', 'PUT', 'DELETE']:
                 self.functions.append(function)
 
-    def get_stop(self):
+    def get__butler__stop(self):
         """Stop the Flask application."""
         func = request.environ.get('werkzeug.server.shutdown')
         if func is None:
             raise RuntimeError('Not running with the Werkzeug Server')  # pragma: no cover
         func()
         return 'stoped'
+
+    get_stop = get__butler__stop
+
+    def get__butler__version(self):
+        """return versions of python, buttler and current class."""
+        data = {}
+        data['python'] = '{version.major}.{version.minor}.{version.micro}'.format(version=sys.version_info)
+        data['butler'] = butler_version
+        with open(sys.modules[self.__class__.__module__].__file__) as fh:
+            md5_obj = hashlib.md5()
+            md5_obj.update(fh.read().encode('utf-8'))
+            data[type(self).__name__] = md5_obj.hexdigest()
+        return jsonify(data)
+
+    def get__butler__ping(self):
+        """return versions of python, buttler and current class."""
+        return 'ok'
