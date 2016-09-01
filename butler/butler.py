@@ -36,9 +36,7 @@ class Butler(object):
 
     """
 
-    _server = None
-
-    def __init__(self):
+    def __init__(self, *args, **kwargs):  # pylint: disable=unused-argument
         """Init Butler functions."""
         self.functions = []
         self.init_functions()
@@ -62,12 +60,20 @@ class Butler(object):
     @classmethod
     def Server(cls, url, *args, **kwargs):
         """Return ButlerServer class."""
-        return ButlerServer(cls(*args, **kwargs), url)
+        return ButlerServer(cls, url, *args, **kwargs)
+
+    def _init_server(self, *args, **kwargs):
+        """Init function to run only on server instance."""
+        pass
 
     @classmethod
     def Client(cls, url, *args, **kwargs):
         """Return ButlerClient class."""
-        return ButlerClient(cls(*args, **kwargs), url)
+        return ButlerClient(cls, url, *args, **kwargs)
+
+    def _init_client(self, *args, **kwargs):
+        """Init function to run only on client instance."""
+        pass
 
     def init_functions(self):
         """Read class functions and register the matching routes."""
@@ -88,7 +94,7 @@ class Butler(object):
     get_stop = get__butler__stop
 
     def get__butler__version(self):
-        """return versions of python, buttler and current class."""
+        """Return versions of python, buttler and current class."""
         data = {}
         data['python'] = '{version.major}.{version.minor}.{version.micro}'.format(version=sys.version_info)
         data['butler'] = butler_version
@@ -99,5 +105,5 @@ class Butler(object):
         return jsonify(data)
 
     def get__butler__ping(self):
-        """return versions of python, buttler and current class."""
+        """Return `ok` validation server is up."""
         return 'ok'

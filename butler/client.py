@@ -8,19 +8,20 @@ class ButlerClient(object):
     with the same parameters, and can send the request to the Butler instance
     """
 
-    def __init__(self, butler, url):
+    def __init__(self, butler, url, *args, **kwargs):
         """Init properties.
 
         :param server: Butler instance
         """
         self.url = url.rstrip('/')
-        self.butler = butler
+        self.butler = butler(*args, **kwargs)
         self.functions = {}
         self.session = requests.Session()
         self.response = None
+        self.butler._init_client(*args, **kwargs)  # pylint: disable=protected-access
 
     def _get_function(self, function_name):
-        """get ButlerFunction instance by it's name."""
+        """Get ButlerFunction instance by it's name."""
         for func in self.butler.functions:
             if func.function_name == function_name:
                 return func

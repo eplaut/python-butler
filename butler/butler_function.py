@@ -43,10 +43,10 @@ class ButlerFunction(object):
         return rdefaults[rargs.index(name)]
 
     def _get_base_url(self):
-        """returns the prefix for the view function, double underscore changed to slash."""
+        """Returns the prefix for the view function, double underscore changed to slash."""
         return '/{}/'.format(self.name.lower().replace('__', '/'))
 
     def get_url(self, params):
-        """returns full url, removing ending slashes."""
+        """Returns full url, removing ending slashes."""
         base_url = self._get_base_url()
         return str(base_url + '/'.join([str(p) for p in params])).rstrip('/')
