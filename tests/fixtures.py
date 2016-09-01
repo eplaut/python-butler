@@ -6,6 +6,21 @@ from butler import Butler
 
 
 class ButlerTest(Butler):
+    def __init__(self, *args, **kwargs):
+        super(ButlerTest, self).__init__(*args, **kwargs)
+        self._is_server = False
+        self._is_client = False
+        self._check_args = args
+        self._check_kwargs = kwargs
+
+    def _init_server(self, *args, **kwargs):
+        super(ButlerTest, self)._init_server(*args, **kwargs)
+        self._is_server = True
+
+    def _init_client(self, *args, **kwargs):
+        super(ButlerTest, self)._init_client(*args, **kwargs)
+        self._is_client = True
+
     def get_test_get(self):
         return 'test get'
 
