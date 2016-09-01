@@ -15,7 +15,7 @@ class ButlerServer(object):
     """
 
     def __init__(self, butler, url, *args, **kwargs):
-        """init all parameters.
+        """Init all parameters.
 
         :param butler: Butler instance with the required functionality
         :param url: The URL to bind to the server

@@ -21,7 +21,7 @@ class ButlerClient(object):
         self.butler._init_client(*args, **kwargs)  # pylint: disable=protected-access
 
     def _get_function(self, function_name):
-        """get ButlerFunction instance by it's name."""
+        """Get ButlerFunction instance by it's name."""
         for func in self.butler.functions:
             if func.function_name == function_name:
                 return func
