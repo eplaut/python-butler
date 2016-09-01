@@ -14,7 +14,7 @@ class ButlerServer(object):
     ButlerServer create relevant routes and serve the application, following ButlerFunctions rules
     """
 
-    def __init__(self, butler, url):
+    def __init__(self, butler, url, *args, **kwargs):
         """init all parameters.
 
         :param butler: Butler instance with the required functionality
@@ -24,8 +24,8 @@ class ButlerServer(object):
         self._app = Flask(__name__)
 
         # register functions to app routes
-        self.butler = butler
-        self.functions = butler.functions
+        self.butler = butler(*args, **kwargs)
+        self.functions = self.butler.functions
         self._register_urls()
 
         # readurl params
@@ -36,6 +36,7 @@ class ButlerServer(object):
         self.port = self._get_port_from_url(parsed_url)
         self.args = []
         self.kwargs = {}
+        self.butler._init_server(*args, **kwargs)  # pylint: disable=protected-access
 
     @staticmethod
     def _get_port_from_url(parsed_url):

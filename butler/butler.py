@@ -38,7 +38,7 @@ class Butler(object):
 
     _server = None
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Init Butler functions."""
         self.functions = []
         self.init_functions()
@@ -62,12 +62,20 @@ class Butler(object):
     @classmethod
     def Server(cls, url, *args, **kwargs):
         """Return ButlerServer class."""
-        return ButlerServer(cls(*args, **kwargs), url)
+        return ButlerServer(cls, url, *args, **kwargs)
+
+    def _init_server(self, *args, **kwargs):
+        """Init function to run only on server instance."""
+        pass
 
     @classmethod
     def Client(cls, url, *args, **kwargs):
         """Return ButlerClient class."""
-        return ButlerClient(cls(*args, **kwargs), url)
+        return ButlerClient(cls, url, *args, **kwargs)
+
+    def _init_client(self, *args, **kwargs):
+        """Init function to run only on client instance."""
+        pass
 
     def init_functions(self):
         """Read class functions and register the matching routes."""
