@@ -1,6 +1,7 @@
 import threading
 from flask import Flask
 from logbook import debug
+from flasgger import Swagger
 
 try:
     from urlparse import urlparse
@@ -26,6 +27,8 @@ class ButlerServer(object):
         # register functions to app routes
         self.butler = butler(*args, **kwargs)
         self.functions = self.butler.functions
+        if self.butler.has_swagger_file:
+            Swagger(self._app)
         self._register_urls()
 
         # readurl params

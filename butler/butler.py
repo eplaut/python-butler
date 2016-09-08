@@ -1,8 +1,10 @@
+import os
 import sys
 import json
 import hashlib
 import inspect
-from flask import request, jsonify
+from flask import request, jsonify, redirect, abort
+from flask.helpers import send_from_directory
 
 from .butler_function import ButlerFunction
 from .client import ButlerClient
@@ -40,6 +42,7 @@ class Butler(object):
         """Init Butler functions."""
         self.functions = []
         self.init_functions()
+        self._swagger_api_file = kwargs.get('swagger_file', None)
 
     @property
     def json(self):
@@ -56,6 +59,11 @@ class Butler(object):
             return request.args
         except RuntimeError:  # cannot inspect this function
             return {}
+
+    @property
+    def has_swagger_file(self):
+        """Return True if _swagger_api_file defined and exists."""
+        return self._swagger_api_file and os.path.isfile(self._swagger_api_file)
 
     @classmethod
     def Server(cls, url, *args, **kwargs):
@@ -107,3 +115,15 @@ class Butler(object):
     def get__butler__ping(self):
         """Return `ok` validation server is up."""
         return 'ok'
+
+    def get__butler___api(self):
+        """Serve _swagger_api_file as is."""
+        if self.has_swagger_file:
+            return send_from_directory(*os.path.split(self._swagger_api_file))
+        abort(404)
+
+    def get__butler__api(self):
+        """Redirect to swagger-ui with _swagger_api_file."""
+        if self.has_swagger_file:
+            return redirect('apidocs/index.html?url=/_butler/_api')
+        abort(404)

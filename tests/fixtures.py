@@ -54,11 +54,11 @@ def butler_client():
     butler_server = ButlerTest.Server('http://localhost:8888')
     butler_client = ButlerTest.Client('http://localhost:8888')
     butler_server.run_async()
-    time.sleep(1)
+    time.sleep(0.3)
 
     def stop_server():
         butler_client.get_stop()
-        time.sleep(1)
+        time.sleep(0.3)
 
     slash.add_cleanup(stop_server, scope='session')
     return butler_client
