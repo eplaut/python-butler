@@ -118,8 +118,9 @@ class Butler(object):
     def get__butler___api(self):
         if self.has_swagger_file:
             return send_from_directory(*os.path.split(self._swagger_api_file))
-        else:
-            abort(404)
+        abort(404)
 
     def get__butler__api(self):
-        return redirect('apidocs/index.html?url=/_butler/_api')
+        if self.has_swagger_file:
+            return redirect('apidocs/index.html?url=/_butler/_api')
+        abort(404)
