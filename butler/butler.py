@@ -40,6 +40,7 @@ class Butler(object):
 
     def __init__(self, *args, **kwargs):  # pylint: disable=unused-argument
         """Init Butler functions."""
+        super(Butler, self).__init__()
         self.functions = []
         self.init_functions()
         self._swagger_api_file = kwargs.get('swagger_file', None)
