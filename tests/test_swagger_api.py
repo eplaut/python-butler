@@ -37,11 +37,12 @@ def swagge_file():
 
 def test_swagger_file_on(butler_client, swagge_file):
     # get new server with swagger_file
-    butler_client.get__butler__stop()
-    time.sleep(0.3)
+    # butler_client.get__butler__stop()
+    # time.sleep(0.3)
     butler_server = ButlerTest.Server('http://localhost:8888', swagger_file=swagge_file)
-    butler_server.run_async()
-    time.sleep(0.3)
+    butler_client.session.adapters['http://'].client = butler_server._app.test_client()
+    # butler_server.run_async()
+    # time.sleep(0.3)
     response = butler_client.get__butler___api()
     assert response.status_code == 200
     assert response.content.decode("utf-8") == DATA

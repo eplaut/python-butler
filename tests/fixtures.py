@@ -1,7 +1,5 @@
-import time
 import slash
-import threading
-
+from flask_requests_adapter import FlaskAdapter
 from butler import Butler
 
 
@@ -53,12 +51,5 @@ class ButlerTest(Butler):
 def butler_client():
     butler_server = ButlerTest.Server('http://localhost:8888')
     butler_client = ButlerTest.Client('http://localhost:8888')
-    butler_server.run_async()
-    time.sleep(0.3)
-
-    def stop_server():
-        butler_client.get_stop()
-        time.sleep(0.3)
-
-    slash.add_cleanup(stop_server, scope='session')
+    butler_client.session.mount('http://', FlaskAdapter(butler_server._app.test_client()))
     return butler_client
