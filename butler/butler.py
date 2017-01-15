@@ -79,7 +79,8 @@ class Butler(object):
     def Client(cls, url, *args, **kwargs):
         """Return ButlerClient class.
 
-        :rtype: self"""
+        :rtype: self
+        """
         return ButlerClient(cls, url, *args, **kwargs)
 
     def _init_client(self, *args, **kwargs):
