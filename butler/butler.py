@@ -75,6 +75,10 @@ class Butler(object):
         """Init function to run only on server instance."""
         pass
 
+    def _stop_server(self):
+        """Function to run when stopping the server"""
+        pass
+
     @classmethod
     def Client(cls, url, *args, **kwargs):
         """Return ButlerClient class.
@@ -97,6 +101,7 @@ class Butler(object):
 
     def get__butler__stop(self):
         """Stop the Flask application."""
+        self._stop_server()
         func = request.environ.get('werkzeug.server.shutdown')
         if func is None:
             raise RuntimeError('Not running with the Werkzeug Server')  # pragma: no cover
