@@ -76,7 +76,7 @@ class Butler(object):
         pass
 
     def _stop_server(self):
-        """Function to run when stopping the server"""
+        """Function to run when stopping the server."""
         pass
 
     @classmethod
