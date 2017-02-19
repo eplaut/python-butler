@@ -44,7 +44,7 @@ class ButlerFunction(object):
 
     def _get_base_url(self):
         """Returns the prefix for the view function, double underscore changed to slash."""
-        return '/{}/'.format(self.name.lower().replace('__', '/'))
+        return '/{}/'.format(self.name.replace('__', '/'))
 
     def get_url(self, params):
         """Returns full url, removing ending slashes."""
