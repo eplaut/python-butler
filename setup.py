@@ -11,7 +11,7 @@ with open(_in_same_dir("butler", "__version__.py")) as version_file:
     exec(version_file.read())  # pylint: disable=W0122
 
 install_requires = [
-    "Flask==0.11.1",
+    "Flask==1.0",
     "requests==2.10.0",
     "Logbook==1.0.0",
     "flasgger==0.5.13"
